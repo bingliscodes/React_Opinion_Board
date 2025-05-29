@@ -1,8 +1,12 @@
 import { useActionState } from "react";
+import Submit from "./Submit.jsx";
 import { isNotEmpty, hasMinLength } from "../util/validation.js";
+import { OpinionsContext } from "../store/opinions-context.jsx";
 
 export function NewOpinion() {
-  function opinionAction(prevFormState, formData) {
+  const { addOpinion } = use(OpinionsContext);
+
+  async function opinionAction(prevFormState, formData) {
     const userName = formData.get("userName");
     const title = formData.get("title");
     const body = formData.get("body");
@@ -12,6 +16,7 @@ export function NewOpinion() {
     if (!isNotEmpty(userName)) errors.push("Please enter a user name");
     if (!isNotEmpty(title))
       errors.push("Please enter a title for your opinion");
+    if (!isNotEmpty(body)) errors.push("Please enter an opinion");
 
     if (errors.length > 0)
       return {
@@ -23,6 +28,7 @@ export function NewOpinion() {
         },
       };
 
+    await addOpinion({ title, body, userName });
     return { errors: null };
   }
 
@@ -66,16 +72,14 @@ export function NewOpinion() {
         </p>
 
         {formState.errors && (
-          <ul className="error">
+          <ul className="errors">
             {formState.errors.map((err) => (
               <li key={err}>{err}</li>
             ))}
           </ul>
         )}
 
-        <p className="actions">
-          <button type="submit">Submit</button>
-        </p>
+        <Submit />
       </form>
     </div>
   );
