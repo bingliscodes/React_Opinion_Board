@@ -2,6 +2,7 @@ import { useActionState } from "react";
 import Submit from "./Submit.jsx";
 import { isNotEmpty, hasMinLength } from "../util/validation.js";
 import { OpinionsContext } from "../store/opinions-context.jsx";
+import { use } from "react";
 
 export function NewOpinion() {
   const { addOpinion } = use(OpinionsContext);
